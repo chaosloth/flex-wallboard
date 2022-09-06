@@ -1,0 +1,48 @@
+{
+  "name": "flex-wallboard",
+  "description": "Simple dashboard to show contact center statistics",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "react-scripts start",
+    "deploy": "twilio-run deploy",
+    "package": "rm -rf ./assets && react-scripts build && mv build assets",
+    "start": "twilio-run start",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "request": "^2.88.2",
+    "twilio": "^3.56",
+    "moment-timezone": "^0.5.37"
+  },
+  "devDependencies": {
+    "twilio-sync": "^0.12.2",
+    "twilio-run": "^3.4.2",
+    "@material-ui/core": "^4.11.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "moment": "^2.29.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.3"
+  },
+  "engines": {
+    "node": "14"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
