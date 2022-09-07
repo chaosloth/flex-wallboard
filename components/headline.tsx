@@ -15,7 +15,7 @@ export const Headline: React.FC = () => {
         margin="space70"
         color={"colorTextBrandInverse"}
       >
-        Service Desk Phone Queue
+        Real-time Dashboard
       </Text>
     </Box>
   );

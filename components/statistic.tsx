@@ -1,7 +1,11 @@
 import { Card, Text } from "@twilio-paste/core";
-import { StatisticType } from "../utils/statistics";
+import StatUtil, { StatisticType } from "../utils/statistics";
 
-export const Statistic: React.FC<StatisticType> = (props: StatisticType) => {
+interface StatisticProps {
+  stat: StatisticType;
+}
+
+export const Statistic: React.FC<StatisticProps> = (props: StatisticProps) => {
   return (
     <Card padding={"space70"} element="METRIC">
       <Text as="div" textAlign={"center"}>
@@ -13,7 +17,7 @@ export const Statistic: React.FC<StatisticType> = (props: StatisticType) => {
           fontWeight={"fontWeightLight"}
           marginBottom="space60"
         >
-          {props.label}
+          {props.stat.label}
         </Text>
         <Text
           as="div"
@@ -21,7 +25,9 @@ export const Statistic: React.FC<StatisticType> = (props: StatisticType) => {
           fontWeight="fontWeightMedium"
           lineHeight={"lineHeight80"}
         >
-          {props.value}
+          {props.stat.format === "seconds"
+            ? StatUtil.fmtSeconds(parseInt(props.stat.value))
+            : props.stat.value}
         </Text>
       </Text>
     </Card>

@@ -9,7 +9,7 @@ import { Headline } from "../components/headline";
 import { Footer } from "../components/footer";
 
 import SyncClient from "twilio-sync";
-import StatUtil from "../utils/statistics";
+import StatUtil, { StatisticType } from "../utils/statistics";
 import { LoadingCard } from "../components/loadingCard";
 
 const Home: NextPage = () => {
@@ -17,6 +17,7 @@ const Home: NextPage = () => {
   const [data, setData] = useState<any>();
   const [status, setStatus] = useState<string>();
   const [client, setClient] = useState<SyncClient>();
+  const [token, setToken] = useState<string>();
 
   const BASE_URL = process.env.NEXT_PUBLIC_API_BASE || "";
 
@@ -51,9 +52,11 @@ const Home: NextPage = () => {
         setStatus("Fetching new access token");
         const token = await getToken();
         client.updateToken(token);
+        setToken(token);
         setStatus("Updated access token");
       });
       setClient(client);
+      setToken(token);
     })();
 
     return () => {
@@ -77,18 +80,44 @@ const Home: NextPage = () => {
           let stats = StatUtil.parse(doc.value);
           setData(stats);
           setLoading(false);
-          setStatus("Updated " + new Date().toTimeString());
+          setStatus("Last activity " + new Date().toTimeString());
 
           doc.on("updated", (event) => {
             console.log("Sync doc updated", doc.value);
             let stats = StatUtil.parse(event.value);
             console.log("Got stats", stats);
             setData(stats);
-            setStatus("Last update " + new Date().toTimeString());
+            setStatus("Last activity " + new Date().toTimeString());
           });
         });
     }
-  }, [client]);
+  }, [client, token]);
+
+  // Increment stat counters
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (!data) return;
+
+      // Increment
+      console.log("Incrementing...");
+
+      let newData: StatisticType[] = [];
+
+      data.forEach((stat: StatisticType) => {
+        if (stat.increment) {
+          // stat.value = parseInt(stat.value).toString();
+          if (parseInt(stat.value) > 0) stat.value = stat.value + 1;
+        }
+        newData.push(stat);
+        setData(newData);
+        // return newData;
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(id);
+    };
+  });
 
   let loader = [1, 2, 3, 4, 5, 6];
 
@@ -117,7 +146,7 @@ const Home: NextPage = () => {
           {data &&
             data.map((item: { label: string; value: string }, i: number) => (
               <Column key={i} span={4} element="STAT">
-                <Statistic label={item.label} value={item.value} />
+                <Statistic stat={item} />
               </Column>
             ))}
         </Grid>
