@@ -3,6 +3,7 @@ exports.handler = function (context, event, callback) {
   const authToken = context.AUTH_TOKEN;
   const client = require("twilio")(accountSid, authToken);
   let response = new Twilio.Response();
+
   response.appendHeader("Access-Control-Allow-Origin", "*");
   response.appendHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
   response.appendHeader(
@@ -12,15 +13,15 @@ exports.handler = function (context, event, callback) {
   response.appendHeader("Content-Type", "application/json");
   response.setBody("updated");
 
-  var moment = require("moment-timezone");
-  var endDate = moment().tz("Australia/Darwin").toDate();
-  var endHour = moment().tz("Australia/Darwin").hour();
+  let moment = require("moment-timezone");
+  let endDate = moment().tz(context.DASHBOARD_TIMEZONE).toDate();
+  let endHour = moment().tz(context.DASHBOARD_TIMEZONE).hour();
 
   var startDate;
   if (endHour >= 6) {
     console.log("late");
     startDate = moment()
-      .tz("Australia/Darwin")
+      .tz(context.DASHBOARD_TIMEZONE)
       .hour(6)
       .minute(0)
       .second(0)
@@ -28,7 +29,7 @@ exports.handler = function (context, event, callback) {
       .toDate();
   } else {
     startDate = moment()
-      .tz("Australia/Darwin")
+      .tz(context.DASHBOARD_TIMEZONE)
       .hour(6)
       .minute(0)
       .second(0)
@@ -48,7 +49,7 @@ exports.handler = function (context, event, callback) {
     .then((workspace_statistics) =>
       client.sync
         .services(context.DASHBOARD_SYNC_SERVICE_SID)
-        .documents("dashboardStats")
+        .documents(context.DOCUMENT_NAME)
         .update({ data: { workspace_statistics } })
         .then((document) => callback(null, response))
     );
