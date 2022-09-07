@@ -19,7 +19,11 @@ See `package.json` for script details, note the build task moves the build folde
 
 4. Update `.env` file with API Key, Auth token, Task Router workspace and Sync doc
 
-5. Run `yarn next-build` to create new app build and put it in `assets` folder, note you can build for specifc environments with: 1.`yarn next-build:dev` which uses the `.env.development` file 2.`yarn next-build:uat` which uses the `.env.uat` file 3.`yarn next-build:production` which uses the `.env.production` file
+5. Run `yarn next-build` to create new app build and put it in `assets` folder, note you can build for specific environments with:
+
+   1. `yarn next-build:dev` which uses the `.env.development` file
+   2. `yarn next-build:uat` which uses the `.env.uat` file
+   3. `yarn next-build:prod` which uses the `.env.production` file
 
 6. Set the timezone variable e.g. `DASHBOARD_TIMEZONE=Australia/Sydney` in `.env` file
 
