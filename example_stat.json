@@ -1,0 +1,32 @@
+{
+	"Tasks Waiting": {
+		"metric": {
+			"format": "",
+			"formula": "data.workspace_statistics.realtime.longest_task_waiting_age",
+			"increment": false,
+			"label": "Tasks Waiting",
+			"value": 9,
+			"defaultStyle": {
+				"styleName": "Default",
+				"headlineColour": "colorTextDecorative10",
+				"statColour": "colorText",
+				"backgroundColour": "transparent"
+			},
+			"firstThresholdValue": "20",
+			"firstThresholdStyle": {
+				"styleName": "Success",
+				"headlineColour": "colorTextIconSuccess",
+				"statColour": "colorTextIconSuccess",
+				"backgroundColour": "transparent"
+			},
+			"secondThresholdValue": "30",
+			"secondThresholdStyle": {
+				"styleName": "Error",
+				"headlineColour": "colorTextIconError",
+				"statColour": "colorTextIconError",
+				"backgroundColour": "transparent"
+			},
+			"invertThresholds": true
+		}
+	}
+}

@@ -1,0 +1,60 @@
+{
+  "Longest Waiting": {
+    "metric": {
+      "defaultStyle": {
+        "statColour": "colorText",
+        "backgroundColour": "transparent",
+        "headlineColour": "colorTextDecorative10",
+        "styleName": "Default"
+      },
+      "format": "seconds",
+      "secondThresholdValue": "600",
+      "value": 6,
+      "label": "Longest Waiting",
+      "firstThresholdValue": "10",
+      "secondThresholdStyle": {
+        "statColour": "colorTextInverse",
+        "backgroundColour": "colorBackgroundError",
+        "headlineColour": "colorTextInverse",
+        "styleName": "Error Strong"
+      },
+      "increment": true,
+      "formula": "data.workspace_statistics.realtime.longest_task_waiting_age",
+      "firstThresholdStyle": {
+        "statColour": "colorTextInverse",
+        "backgroundColour": "colorBackgroundWarning",
+        "headlineColour": "colorTextInverse",
+        "styleName": "Warn Strong"
+      }
+    }
+  },
+  "LLW": {
+    "metric": {
+      "defaultStyle": {
+        "statColour": "colorText",
+        "backgroundColour": "transparent",
+        "headlineColour": "colorTextDecorative10",
+        "styleName": "Default"
+      },
+      "format": "",
+      "secondThresholdValue": "600",
+      "value": 6,
+      "label": "LLW",
+      "firstThresholdValue": "10",
+      "secondThresholdStyle": {
+        "statColour": "colorTextInverse",
+        "backgroundColour": "colorBackgroundError",
+        "headlineColour": "colorTextInverse",
+        "styleName": "Error Strong"
+      },
+      "increment": true,
+      "formula": "data.workspace_statistics.realtime.longest_task_waiting_age",
+      "firstThresholdStyle": {
+        "statColour": "colorTextInverse",
+        "backgroundColour": "colorBackgroundWarning",
+        "headlineColour": "colorTextInverse",
+        "styleName": "Warn Strong"
+      }
+    }
+  }
+}

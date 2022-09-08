@@ -9,7 +9,7 @@ import { Headline } from "../components/headline";
 import { Footer } from "../components/footer";
 
 import SyncClient from "twilio-sync";
-import StatUtil, { StatisticType } from "../utils/statistics";
+import StatUtil, { Metric, MetricDefinitions } from "../utils/statistics";
 import { LoadingCard } from "../components/loadingCard";
 
 const Home: NextPage = () => {
@@ -18,6 +18,7 @@ const Home: NextPage = () => {
   const [status, setStatus] = useState<string>();
   const [client, setClient] = useState<SyncClient>();
   const [token, setToken] = useState<string>();
+  const [definitions, setDefinitions] = useState<MetricDefinitions>();
 
   const BASE_URL = process.env.NEXT_PUBLIC_API_BASE || "";
 
@@ -35,6 +36,19 @@ const Home: NextPage = () => {
         console.error("Error getting token", reason);
       });
 
+  const processStats = (definitions: MetricDefinitions, data: any) => {
+    if (!definitions) {
+      console.warn("Received stat data but definitions not set");
+      setStatus("Received stat data but definitions not set");
+      return;
+    }
+    let stats = StatUtil.calculate(definitions, data);
+    console.log("Got stats", stats);
+    setData(stats);
+    setStatus("Last activity " + new Date().toTimeString());
+    setLoading(false);
+  };
+
   // Create sync client and logic for token refresh
   useEffect(() => {
     (async () => {
@@ -51,9 +65,12 @@ const Home: NextPage = () => {
         console.log("Updating token for sync client");
         setStatus("Fetching new access token");
         const token = await getToken();
-        client.updateToken(token);
+        let client = new SyncClient(token);
+        // client.updateToken(token);
         setToken(token);
+        setClient(client);
         setStatus("Updated access token");
+        console.log("Updated access token");
       });
       setClient(client);
       setToken(token);
@@ -69,29 +86,43 @@ const Home: NextPage = () => {
     };
   }, []);
 
-  // Subscribe to updates
+  // Get stats and definitions
   useEffect(() => {
     if (client != null) {
       // Create a subscription to the document
       client
-        .document(process.env.NEXT_PUBLIC_STAT_DOCUMENT_NAME)
+        .document(process.env.NEXT_PUBLIC_DEFINITIONS_DOCUMENT_NAME)
         .then((doc) => {
-          console.log("Sync doc updated", doc.value);
-          let stats = StatUtil.parse(doc.value);
-          setData(stats);
-          setLoading(false);
-          setStatus("Last activity " + new Date().toTimeString());
-
+          console.log("SYNC definitions doc updated", doc.value);
+          setDefinitions(doc.value as MetricDefinitions);
           doc.on("updated", (event) => {
-            console.log("Sync doc updated", doc.value);
-            let stats = StatUtil.parse(event.value);
-            console.log("Got stats", stats);
-            setData(stats);
+            console.log("SYNC definitions doc updated", event.value);
+            setDefinitions(event.value);
             setStatus("Last activity " + new Date().toTimeString());
           });
         });
     }
   }, [client, token]);
+
+  // Subscribe to statistic updates
+  useEffect(() => {
+    if (client != null) {
+      // Get the statistics document
+      client
+        .document(process.env.NEXT_PUBLIC_STAT_DOCUMENT_NAME)
+        .then((doc) => {
+          if (!definitions) {
+            console.warn("Received stats but definitions not set");
+            setStatus("Received stats but definitions not set");
+            return;
+          }
+          // Show stats based on initial data
+          processStats(definitions, doc.value);
+          // Create a subscription to statistics
+          doc.on("updated", (event) => processStats(definitions, event.value));
+        });
+    }
+  }, [client, token, definitions]);
 
   // Increment stat counters
   useEffect(() => {
@@ -99,11 +130,8 @@ const Home: NextPage = () => {
       if (!data) return;
 
       // Increment
-      console.log("Incrementing...");
-
-      let newData: StatisticType[] = [];
-
-      data.forEach((stat: StatisticType) => {
+      let newData: Metric[] = [];
+      data.forEach((stat: Metric) => {
         if (stat.increment) {
           // stat.value = parseInt(stat.value).toString();
           if (parseInt(stat.value) > 0) stat.value = stat.value + 1;
@@ -144,7 +172,7 @@ const Home: NextPage = () => {
             ))}
 
           {data &&
-            data.map((item: { label: string; value: string }, i: number) => (
+            data.map((item: Metric, i: number) => (
               <Column key={i} span={4} element="STAT">
                 <Statistic stat={item} />
               </Column>
