@@ -1,10 +1,72 @@
-# Flex Wallboard
+# Real-time Dashboard
 
-Simple UI to show basic wallboard stats.
+Real-time dashboard to show statistics in real-time.
 
-Stats are stored in a SYNC document to which all clients are subscribed by the sync client API. Each time /dashboardStats function is called the latest Task Router statistics are pulled and placed into the document.
+Stats are stored in a Twilio Sync document to which all clients are subscribed by the sync client API.
 
-## Building
+Metrics can be anything! The dashboard has a built-in ECMA script based interpreter that enables you to show any data you like by defining a formula, it can be a simple as the value or more complex as you see fit. All you need to do is define the metric and put it in the definitions sync document.
+
+![dashboard](./docs/dashboard.png)
+
+![metric definitions](./docs/definitions.png)
+
+## Statistic Definition
+
+Minimum example:
+
+```json
+{
+  "Unique Stat Name": {
+    "metric": {
+      "value": 6,
+      "label": "My awesome statistic",
+      "formula": "data.key_name_to_show",
+    }
+  },
+```
+
+A more complex example with thresholds (colours) at different intervals
+
+```json
+{
+  "Longest Waiting": {
+    "metric": {
+      "defaultStyle": {
+        "statColour": "colorText",
+        "backgroundColour": "transparent",
+        "headlineColour": "colorTextDecorative10",
+        "styleName": "Default"
+      },
+      "format": "seconds",
+      "secondThresholdValue": "600",
+      "value": 6,
+      "label": "Longest Waiting",
+      "firstThresholdValue": "10",
+      "secondThresholdStyle": {
+        "statColour": "colorTextInverse",
+        "backgroundColour": "colorBackgroundError",
+        "headlineColour": "colorTextInverse",
+        "styleName": "Error Strong"
+      },
+      "increment": true,
+      "formula": "data.workspace_statistics.realtime.longest_task_waiting_age",
+      "firstThresholdStyle": {
+        "statColour": "colorTextInverse",
+        "backgroundColour": "colorBackgroundWarning",
+        "headlineColour": "colorTextInverse",
+        "styleName": "Warn Strong"
+      }
+    }
+  }
+```
+
+## Showing Twilio Flex metrics
+
+We use the power of Task Router to update a sync document when an event occurs, Task Router will emit a JSON document to a helper function (see: `functions/dashboardStats.js`). This function simply stores the all the metrics received into the document which in turn causes all of the dashboards to update.
+
+Because the Task Router data will well-known we can expected a certain set of values to exist, however if additional Break codes are configured for Flex then more or less data will be available. A set of default metrics is located in `default_stats.json`.
+
+# Building
 
 This is a Twilio Serverless project, run `yarn build` to create a new build which will put files into the `assets` folder
 See `package.json` for script details, note the build task moves the build folder to assets
@@ -43,7 +105,9 @@ See `package.json` for script details, note the build task moves the build folde
 
 # Troublshooting
 
-If you see "ERR" for a statistic it is an indicator the formula is incorrect. Check that that appropriate breaks have been configured in
+If you see "ERR" for a statistic it is an indicator the formula is incorrect. Check that that appropriate breaks have been configured in Flex.
+
+If you see "ERR FMT" for a statistic it means the value of the statistic could not be convered into the appropriate format. Check the statistic definition, specifcally the "format" value.
 
 # Credits
 
