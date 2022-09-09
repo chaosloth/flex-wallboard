@@ -81,7 +81,7 @@ See `package.json` for script details.
 
 4. Create another Sync document in the same service called `dashboard-definitions` (see: `.env` for name)
 
-5. Import default statistic definitions from `defaultStats.json`, modify as required.
+5. Import default statistic definitions from `default_stats.json`, modify as required.
 
 6. Update `.env` file with API Key, Auth token, Task Router workspace and Sync doc
 
