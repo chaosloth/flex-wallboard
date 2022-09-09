@@ -21,6 +21,8 @@ Metrics can be anything! The dashboard has a built-in ECMA script based interpre
 
 ## Statistic Definition
 
+### Simple metric
+
 Minimum example:
 
 ```json
@@ -34,7 +36,25 @@ Minimum example:
   },
 ```
 
-A more complex example with thresholds (colours) at different intervals
+### More complex formulas
+
+Formulas can be any ES6 javascript notation using top level functions as utilities
+
+```json
+	"Workers Logged In": {
+		"metric": {
+			"format": "",
+			"formula": "data.workspace_statistics.realtime.total_workers - data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Offline').workers",
+			"increment": false,
+			"label": "Workers Logged In",
+			"value": 9
+		}
+	},
+```
+
+### Styling a metric
+
+An even more complex example with thresholds (colours) at different intervals
 
 ```json
 {
