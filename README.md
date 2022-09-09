@@ -1,6 +1,6 @@
 # Real-time Dashboard
 
-Real-time dashboard to show statistics in real-time.
+⚡️ Real-time dashboard ⚡️ to show statistics in on common displays or your other monitor
 
 Stats are stored in a Twilio Sync document to which all clients are subscribed by the sync client API.
 
@@ -8,9 +8,9 @@ Metrics can be anything! The dashboard has a built-in ECMA script based interpre
 
 **_Features:_**
 
-- 🌟 Configurable statics, anything in a JSON document can be turned into a metric!
+- 🌟 Configurable statics, anything in a JSON document can be turned into a metric 💥
 - 🌟 Javascript interpreter to evaluate stats at runtime => Formulas
-- 🌟 Two levels of thresholds
+- 🌟 Two levels of ✅ ⛔️ thresholds
 - 🌟 Inverted thresholds (evaluate in rising/falling number)
 - 🌟 All your favourite colours 😻
 - 🌟 Paste theme customisation support
