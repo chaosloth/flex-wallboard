@@ -68,8 +68,8 @@ Because the Task Router data has a well-known and stable structure, we can expec
 
 # Building
 
-This is a Twilio Serverless project, run `yarn build` to create a new build which will put files into the `assets` folder
-See `package.json` for script details, note the build task moves the build folder to assets
+This is a Twilio Serverless project, run `yarn build:<environment>` to create a new build which will put files into the `assets` folder which is ideal for Twilio Functions.
+See `package.json` for script details.
 
 ## Installation (Twilio Configuration)
 
