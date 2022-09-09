@@ -6,6 +6,14 @@ Stats are stored in a Twilio Sync document to which all clients are subscribed b
 
 Metrics can be anything! The dashboard has a built-in ECMA script based interpreter that enables you to show any data you like by defining a formula, it can be a simple as the value or more complex as you see fit. All you need to do is define the metric and put it in the definitions sync document.
 
+**_Features:_**
+🌟 Configurable statics, anything in a JSON document can be turned into a metric!
+🌟 Javascript interpreter to evaluate stats at runtime => Formulas
+🌟 Two levels of thresholds
+🌟 Inverted thresholds (evaluate in rising/falling number)
+🌟 All your favourite colours 😻
+🌟 Paste theme customisation support
+
 ![dashboard](./docs/dashboard.png)
 
 ![metric definitions](./docs/definitions.png)
