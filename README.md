@@ -101,7 +101,7 @@ See `package.json` for script details.
 
 10. Run `twilio api:serverless:v1:services:update --ui-editable --sid <SID>` to enable console editing
 
-11. In Twilio console > Task Router > Workspaces > (Default workspace for Flex) > Settings, set the "Event callback URL" to https://<functions path>/dashboardStats
+11. In Twilio console > Task Router > Workspaces > (Default workspace for Flex) > Settings, set the "Event callback URL" to `https://<functions path>/dashboardStats`
 
 # Troublshooting
 
