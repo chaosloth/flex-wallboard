@@ -31,9 +31,10 @@ Minimum example:
     "metric": {
       "value": 6,
       "label": "My awesome statistic",
-      "formula": "data.key_name_to_show",
+      "formula": "data.key_name_to_show"
     }
-  },
+  }
+}
 ```
 
 ### More complex formulas
@@ -41,14 +42,16 @@ Minimum example:
 Formulas can be any ES6 javascript notation using top level functions as utilities
 
 ```json
-"Workers Logged In": {
-   "metric": {
+{
+  "Workers Logged In": {
+    "metric": {
       "format": "",
       "formula": "data.workspace_statistics.realtime.total_workers - data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Offline').workers",
       "increment": false,
       "label": "Workers Logged In",
       "value": 9
-   }
+    }
+  }
 }
 ```
 
@@ -87,6 +90,7 @@ An even more complex example with thresholds (colours) at different intervals
       }
     }
   }
+}
 ```
 
 ## Showing Twilio Flex metrics
