@@ -64,7 +64,7 @@ A more complex example with thresholds (colours) at different intervals
 
 We use the power of Task Router to update a sync document when an event occurs, Task Router will emit a JSON document to a helper function (see: `functions/dashboardStats.js`). This function simply stores the all the metrics received into the document which in turn causes all of the dashboards to update.
 
-Because the Task Router data will well-known we can expected a certain set of values to exist, however if additional Break codes are configured for Flex then more or less data will be available. A set of default metrics is located in `default_stats.json`.
+Because the Task Router data has a well-known and stable structure, we can expected a certain set of values to normally exist. However if additional Break codes are configured for Flex then more or less data will be available. A set of default metrics is located in `default_stats.json`, load these into a sync document (steps below) to get bootstrapped.
 
 # Building
 
