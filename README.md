@@ -9,6 +9,7 @@ Metrics can be anything! The dashboard has a built-in ECMA script based interpre
 **_Features:_**
 
 - 🌟 Configurable statics, anything in a JSON document can be turned into a metric 💥
+- 🌟 Supports Workspace and Task Queue stats OOB
 - 🌟 Javascript interpreter to evaluate stats at runtime => Formulas
 - 🌟 Two levels of ✅ ⛔️ thresholds
 - 🌟 Inverted thresholds (evaluate in rising/falling number)
@@ -46,11 +47,28 @@ Formulas can be any ES6 javascript notation using top level functions as utiliti
   "Workers Logged In": {
     "metric": {
       "format": "",
-      "formula": "data.workspace_statistics.realtime.total_workers - data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Offline').workers",
+      "formula": "data.workspace.realtime.total_workers - data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Offline').workers",
       "increment": false,
       "label": "Workers Logged In",
       "value": 9
     }
+  }
+}
+```
+
+
+### Task Queue Stat Example
+
+Task Queues and associated data may be located using the `.find` method
+
+```json
+"TQ: Everyone - Total Timed Out": {
+  "metric": {
+    "format": "",
+    "formula": "data.queues.find((q) => q.friendlyName === 'Everyone').data.cumulative.reservations_timed_out",
+    "increment": false,
+    "label": "TQ: Everyone - Total Timed Out",
+    "value": 9
   }
 }
 ```
@@ -81,7 +99,7 @@ An even more complex example with thresholds (colours) at different intervals
         "styleName": "Error Strong"
       },
       "increment": true,
-      "formula": "data.workspace_statistics.realtime.longest_task_waiting_age",
+      "formula": "data.workspace.realtime.longest_task_waiting_age",
       "firstThresholdStyle": {
         "statColour": "colorTextInverse",
         "backgroundColour": "colorBackgroundWarning",
@@ -140,7 +158,7 @@ See `package.json` for script details.
 
 If you see "ERR" for a statistic it is an indicator the formula is incorrect. Check that that appropriate breaks have been configured in Flex.
 
-If you see "ERR FMT" for a statistic it means the value of the statistic could not be convered into the appropriate format. Check the statistic definition, specifcally the "format" value.
+If you see "ERR FMT" for a statistic it means the value of the statistic could not be converted into the appropriate format. Check the statistic definition, specifically the "format" value.
 
 # Credits
 

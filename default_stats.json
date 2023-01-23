@@ -1,164 +1,164 @@
 {
-	"Tasks Waiting": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.realtime.longest_task_waiting_age",
-			"increment": false,
-			"label": "Tasks Waiting",
-			"value": 9
-		}
-	},
-	"Total Completed": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.cumulative.tasks_completed",
-			"increment": false,
-			"label": "Total Completed",
-			"value": 9
-		}
-	},
-	"Total Cancelled": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.cumulative.tasks_canceled",
-			"increment": false,
-			"label": "Total Completed",
-			"value": 9
-		}
-	},
-	"Avg until Cancelled": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.cumulative.wait_duration_until_canceled.avg",
-			"increment": false,
-			"label": "Avg until Cancelled",
-			"value": 9
-		}
-	},
-	"Longest Waiting": {
-		"metric": {
-			"format": "seconds",
-			"formula": "data.workspace_statistics.realtime.longest_task_waiting_age",
-			"increment": true,
-			"label": "Longest Waiting",
-			"value": 9
-		}
-	},
-	"ASA": {
-		"metric": {
-			"format": "seconds",
-			"formula": "data.workspace_statistics.cumulative.avg_task_acceptance_time",
-			"increment": false,
-			"label": "ASA",
-			"value": 9
-		}
-	},
-	"Reservations Accepted": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.cumulative.reservations_accepted",
-			"increment": false,
-			"label": "Reservations Accepted",
-			"value": 9
-		}
-	},
-	"Tasks Canceled": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.cumulative.tasks_canceled",
-			"increment": false,
-			"label": "Tasks Canceled",
-			"value": 9
-		}
-	},
-	"ASA FMT": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.cumulative.avg_task_acceptance_time",
-			"increment": false,
-			"label": "ASA",
-			"value": 9
-		}
-	},
-	"Workers Logged In": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.realtime.total_workers - data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Offline').workers",
-			"increment": false,
-			"label": "Workers Logged In",
-			"value": 9
-		}
-	},
-	"Workers Available": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Available').workers",
-			"increment": false,
-			"label": "Workers Available",
-			"value": 9
-		}
-	},
-	"Workers Offline": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Offline').workers",
-			"increment": false,
-			"label": "Workers Offline",
-			"value": 9
-		}
-	},
-	"Workers Follow Up": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Follow Up').workers",
-			"increment": false,
-			"label": "Workers Follow Up",
-			"value": 9
-		}
-	},
-	"Workers Lunch Break": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Lunch Break').workers",
-			"increment": false,
-			"label": "Workers Lunch Break",
-			"value": 9
-		}
-	},
-	"Workers Training": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Training').workers",
-			"increment": false,
-			"label": "Workers Training",
-			"value": 9
-		}
-	},
-	"Workers Meeting": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Meeting').workers",
-			"increment": false,
-			"label": "Workers Meeting",
-			"value": 9
-		}
-	},
-	"Workers Personal Break": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Personal Break').workers",
-			"increment": false,
-			"label": "Workers Personal Break",
-			"value": 9
-		}
-	},
-	"Workers Unavailable": {
-		"metric": {
-			"format": "",
-			"formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Personal Break').workers",
-			"increment": false,
-			"label": "Workers Unavailable",
-			"value": 9
-		}
-	}
+  "Tasks Waiting": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.realtime.longest_task_waiting_age",
+      "increment": false,
+      "label": "Tasks Waiting",
+      "value": 9
+    }
+  },
+  "Total Completed": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.cumulative.tasks_completed",
+      "increment": false,
+      "label": "Total Completed",
+      "value": 9
+    }
+  },
+  "Total Cancelled": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.cumulative.tasks_canceled",
+      "increment": false,
+      "label": "Total Completed",
+      "value": 9
+    }
+  },
+  "Avg until Cancelled": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.cumulative.wait_duration_until_canceled.avg",
+      "increment": false,
+      "label": "Avg until Cancelled",
+      "value": 9
+    }
+  },
+  "Longest Waiting": {
+    "metric": {
+      "format": "seconds",
+      "formula": "data.workspace_statistics.realtime.longest_task_waiting_age",
+      "increment": true,
+      "label": "Longest Waiting",
+      "value": 9
+    }
+  },
+  "ASA": {
+    "metric": {
+      "format": "seconds",
+      "formula": "data.workspace_statistics.cumulative.avg_task_acceptance_time",
+      "increment": false,
+      "label": "ASA",
+      "value": 9
+    }
+  },
+  "Reservations Accepted": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.cumulative.reservations_accepted",
+      "increment": false,
+      "label": "Reservations Accepted",
+      "value": 9
+    }
+  },
+  "Tasks Canceled": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.cumulative.tasks_canceled",
+      "increment": false,
+      "label": "Tasks Canceled",
+      "value": 9
+    }
+  },
+  "ASA FMT": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.cumulative.avg_task_acceptance_time",
+      "increment": false,
+      "label": "ASA",
+      "value": 9
+    }
+  },
+  "Workers Logged In": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.realtime.total_workers - data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Offline').workers",
+      "increment": false,
+      "label": "Workers Logged In",
+      "value": 9
+    }
+  },
+  "Workers Available": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Available').workers",
+      "increment": false,
+      "label": "Workers Available",
+      "value": 9
+    }
+  },
+  "Workers Offline": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Offline').workers",
+      "increment": false,
+      "label": "Workers Offline",
+      "value": 9
+    }
+  },
+  "Workers Follow Up": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Follow Up').workers",
+      "increment": false,
+      "label": "Workers Follow Up",
+      "value": 9
+    }
+  },
+  "Workers Lunch Break": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Lunch Break').workers",
+      "increment": false,
+      "label": "Workers Lunch Break",
+      "value": 9
+    }
+  },
+  "Workers Training": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Training').workers",
+      "increment": false,
+      "label": "Workers Training",
+      "value": 9
+    }
+  },
+  "Workers Meeting": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Meeting').workers",
+      "increment": false,
+      "label": "Workers Meeting",
+      "value": 9
+    }
+  },
+  "Workers Personal Break": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Personal Break').workers",
+      "increment": false,
+      "label": "Workers Personal Break",
+      "value": 9
+    }
+  },
+  "Workers Unavailable": {
+    "metric": {
+      "format": "",
+      "formula": "data.workspace_statistics.realtime.activity_statistics.find((e) => e.friendly_name === 'Unavailable').workers",
+      "increment": false,
+      "label": "Workers Unavailable",
+      "value": 9
+    }
+  }
 }
