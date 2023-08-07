@@ -3,10 +3,10 @@
     "outDir": "dist",
     "rootDir": "src",
     "allowJs": true,
-    "module": "esnext",
     "moduleResolution": "node",
     "newLine": "lf",
-    "target": "es6",
+    "target": "es5",
+    "module": "commonjs",
     "skipLibCheck": true,
     "sourceMap": true
   },
