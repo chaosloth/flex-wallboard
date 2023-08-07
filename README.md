@@ -136,6 +136,18 @@ See `package.json` for script details.
 
 6. Update `.env` file with API Key, Auth token, Task Router workspace and Sync doc
 
+
+### Deployment (GitHub Actions -- Recommended)
+
+### Deployment (GitHub Actions -- Local development)
+During development and testing workflows can be prototyped using [ACT](https://github.com/nektos/act)
+
+For example:
+1. Install using Brew `brew install act`
+2. Ensure docker is running
+3. Run with `act --env-file .env -n`
+
+### Deployment (Manual)
 7. Run `yarn next-build` to create new app build and put it in `assets` folder, note you can build for specific environments with:
 
    1. `yarn next-build:dev` which uses the `.env.development` file

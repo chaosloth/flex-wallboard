@@ -1,0 +1,41 @@
+{
+  "name": "flex-wallboard",
+  "description": "Simple dashboard to show contact center statistics",
+  "version": "3.0.0",
+  "private": true,
+  "scripts": {
+    "deploy-env": "npm run deploy -- --env \".env.$ENVIRONMENT\"",
+    "deploy": "twilio serverless:deploy --functions-folder dist/functions --assets-folder dist/assets --override-existing-project --runtime node16",
+    "start": "twilio-run --functions-folder dist/functions --assets-folder dist/assets",
+    "lint": "next lint",
+    "tsc": "tsc --noEmit",
+    "build": "tsc",
+    "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v2",
+    "prestart": "npm run build",
+    "predeploy": "npm run build",
+    "setup-environment": "node scripts/setup-environment.js"
+  },
+  "dependencies": {
+    "env-cmd": "^10.1.0",
+    "moment-timezone": "^0.5.37",
+    "request": "^2.88.2",
+    "twilio": "^3.56",
+    "@twilio-labs/serverless-runtime-types": "^2.2.3",
+    "@twilio/runtime-handler": "1.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "moment": "^2.29.4",
+    "prop-types": "^15.8.1",
+    "twilio-run": "^3.5.3",
+    "twilio-sync": "^0.12.2",
+    "twilio-cli": "^5.5.0",
+    "shelljs": "^0.8.5",
+    "copyfiles": "^2.2.0",
+    "dotenv": "^16.3.1",
+    "typescript": "^5.1.6"
+  },
+  "engines": {
+    "node": "16"
+  }
+}

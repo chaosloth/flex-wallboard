@@ -23,7 +23,6 @@ import {
   TextArea,
   HelpText,
   Switch,
-  SwitchContainer,
 } from "@twilio-paste/core";
 
 import StatUtil, {
@@ -241,18 +240,12 @@ const ConfigureStat: React.FC<ConfigureStatProps> = (
 
               <Separator orientation={"horizontal"} verticalSpacing="space50" />
 
-              <SwitchContainer
-                id={useUID()}
-                label="Invert threshold evaluation"
+              <Switch
+                checked={invertThresholds}
+                onChange={() => setInverted(!invertThresholds)}
               >
-                <Switch
-                  on={invertThresholds}
-                  onClick={(evt) => {
-                    console.log(evt);
-                    setInverted(!invertThresholds);
-                  }}
-                />
-              </SwitchContainer>
+                Invert threshold evaluation
+              </Switch>
             </Column>
             <Column>
               <Box display="flex" alignItems="center" justifyContent="center">
