@@ -8,6 +8,7 @@ Metrics can be anything! The dashboard has a built-in ECMA script based interpre
 
 **_Features:_**
 
+- 🆕 Supports high volume statistics using Sync Map item distribution
 - 🌟 Configurable statics, anything in a JSON document can be turned into a metric 💥
 - 🌟 Supports Workspace and Task Queue stats OOB
 - 🌟 Javascript interpreter to evaluate stats at runtime => Formulas
@@ -113,7 +114,7 @@ An even more complex example with thresholds (colours) at different intervals
 
 ## Showing Twilio Flex metrics
 
-We use the power of Task Router to update a sync document when an event occurs, Task Router will emit a JSON document to a helper function (see: `functions/dashboardStats.js`). This function simply stores the all the metrics received into the document which in turn causes all of the dashboards to update.
+We use the power of Task Router to update a sync document when an event occurs, Task Router will emit a JSON document to a helper function (see: `serverless/src/functions/api/stats.ts`). This function simply stores the all the metrics received into the document which in turn causes all of the dashboards to update.
 
 Because the Task Router data has a well-known and stable structure, we can expected a certain set of values to normally exist. However if additional Break codes are configured for Flex then more or less data will be available. A set of default metrics is located in `default_stats.json`, load these into a sync document (steps below) to get bootstrapped.
 
@@ -128,16 +129,19 @@ See `package.json` for script details.
 
 2. Create new Sync Service (or use default)
 
-3. Create new Sync document in above service called `dashboard-data` (see: `.env` for name)
+3. Create new Sync map in above service and copy the SID
 
 4. Create another Sync document in the same service called `dashboard-definitions` (see: `.env` for name)
 
 5. Import default statistic definitions from `default_stats.json`, modify as required.
 
-6. Update `.env` file with API Key, Auth token, Task Router workspace and Sync doc
+6. Update `.env` file with API Key, Auth token, Task Router workspace and Sync Service and Sync Map
 
 
 ### Deployment (GitHub Actions -- Recommended)
+Use GitHub actions to deploy code, ensure the following is created:
+1. Create an environment
+2. Configure secrets (see build.yaml)
 
 ### Deployment (GitHub Actions -- Local development)
 During development and testing workflows can be prototyped using [ACT](https://github.com/nektos/act)
@@ -145,9 +149,11 @@ During development and testing workflows can be prototyped using [ACT](https://g
 For example:
 1. Install using Brew `brew install act`
 2. Ensure docker is running
-3. Run with `act --env-file .env -n`
+3. Configure secrets in `.secrets` 
+4. Configur inputs in `.input` (e.g. a single line with `environment=dev`)
+5. Run with `act`
 
-### Deployment (Manual)
+### Deployment (Manual -- NOT RECOMMENDED)
 7. Run `yarn next-build` to create new app build and put it in `assets` folder, note you can build for specific environments with:
 
    1. `yarn next-build:dev` which uses the `.env.development` file

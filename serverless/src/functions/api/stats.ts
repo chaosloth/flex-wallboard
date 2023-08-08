@@ -7,8 +7,6 @@ import {
   ServerlessFunctionSignature,
   TwilioClient,
 } from "@twilio-labs/serverless-runtime-types/types";
-import { TaskQueueStatisticsInstance } from "twilio/lib/rest/taskrouter/v1/workspace/taskQueue/taskQueueStatistics";
-import { WorkspaceStatisticsInstance } from "twilio/lib/rest/taskrouter/v1/workspace/workspaceStatistics";
 
 export type MyContext = {
   TWILIO_ACCOUNT_SID: string;
@@ -30,13 +28,16 @@ const updateSyncMap = async (
   context: MyContext,
   friendlyName: string,
   sid: string,
-  data: any
+  data: any,
+  isWorkspace: boolean = false
 ) => {
+  const mapEntryName = isWorkspace ? "WORKSPACE" : "TASK_QUEUE_" + sid;
+
   // Store in Sync and return response
   return client.sync
     .services(context.DASHBOARD_SYNC_SERVICE_SID)
     .syncMaps(context.DASHBOARD_SYNC_MAP_SID)
-    .syncMapItems("TASK_QUEUE_" + sid)
+    .syncMapItems(mapEntryName)
     .update({ data: data })
     .then((data) => {
       console.log(`Updated sync map for ${friendlyName} [${sid}]:`);
@@ -51,7 +52,7 @@ const updateSyncMap = async (
           .services(context.DASHBOARD_SYNC_SERVICE_SID)
           .syncMaps(context.DASHBOARD_SYNC_MAP_SID)
           .syncMapItems.create({
-            key: "TASK_QUEUE_" + sid,
+            key: mapEntryName,
             data: data,
           })
           .then(() =>
@@ -114,11 +115,6 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (
       .toDate();
   }
 
-  let data = {
-    queues: [] as TaskQueueStatisticsInstance[],
-    workspace: {} as WorkspaceStatisticsInstance,
-  };
-
   let allPromises = [];
 
   console.log("Getting Task Queue Statistics");
@@ -171,18 +167,16 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (
         endDate: endDate,
       })
       .then((workspace_data) => {
-        data.workspace = workspace_data;
         console.log("Completed retrieval of Workspace Statistics");
 
-        // Store in Sync and return response
-        client.sync
-          .services(context.DASHBOARD_SYNC_SERVICE_SID)
-          .documents(context.DOCUMENT_NAME)
-          .update({ data: data })
-          .then(() => {
-            console.log(data);
-            console.log("End of Execution");
-          });
+        return updateSyncMap(
+          client,
+          context,
+          "WORKSPACE",
+          context.TWILIO_WORKSPACE_SID,
+          workspace_data,
+          true
+        ).catch((err) => console.log("Error storing workspace stats"));
       })
   );
 

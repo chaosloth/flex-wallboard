@@ -1,17 +1,32 @@
-exports.handler = function (context, event, callback) {
-  // Download the helper library from https://www.twilio.com/docs/node/install
-  // Your Account Sid and Auth Token from twilio.com/console
-  // DANGER! This is insecure. See http://twil.io/secure
-  const accountSid = context.ACCOUNT_SID;
-  const authToken = context.AUTH_TOKEN;
+// Imports global types
+import "@twilio-labs/serverless-runtime-types";
+// Fetches specific types
+import {
+  ServerlessCallback,
+  ServerlessEventObject,
+  ServerlessFunctionSignature,
+  TwilioClient,
+} from "@twilio-labs/serverless-runtime-types/types";
+
+export type MyContext = {
+  DASHBOARD_SYNC_SERVICE_SID: string;
+  DEFINITIONS_DOCUMENT_NAME: string;
+};
+
+export type MyEvent = {} & ServerlessEventObject;
+
+export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (
+  context,
+  event,
+  callback: ServerlessCallback
+) => {
+  console.log("event received - /api/save: ", event);
 
   let response = new Twilio.Response();
   response.appendHeader("Access-Control-Allow-Origin", "*");
   response.appendHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
 
-  console.log("ORIG Event", event);
-
-  const client = require("twilio")(accountSid, authToken);
+  const client = context.getTwilioClient();
 
   client.sync
     .services(context.DASHBOARD_SYNC_SERVICE_SID)
@@ -22,7 +37,7 @@ exports.handler = function (context, event, callback) {
       let updated_doc = document.data;
 
       // Insert statistic definition
-      for (k in event) {
+      for (let k in event) {
         if (k !== "request") updated_doc[k] = event[k];
       }
 
