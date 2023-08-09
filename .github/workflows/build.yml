@@ -1,0 +1,61 @@
+name: Build
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: environment
+        description: "Environment to use for deployment"
+
+jobs:
+  build-serverless:
+    name: Serverless
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    env:
+      ENVIRONMENT: ${{ github.event.inputs.environment }}
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      DASHBOARD_SYNC_SERVICE_SID: ${{ secrets.DASHBOARD_SYNC_SERVICE_SID }}
+      DASHBOARD_SYNC_MAP_SID: ${{ secrets.DASHBOARD_SYNC_MAP_SID }}
+      DEFINITIONS_DOCUMENT_NAME: ${{ secrets.DEFINITIONS_DOCUMENT_NAME }}
+      DASHBOARD_TIMEZONE: ${{ secrets.DASHBOARD_TIMEZONE }}
+      TWILIO_WORKSPACE_SID: ${{ secrets.TWILIO_WORKSPACE_SID }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: NextApp - Install NPM packages
+        run: npm install
+
+      - name: Setup Environment
+        id: setup-environment-next
+        run: npm run setup-environment $ENVIRONMENT
+
+      - name: Build next app
+        run: npm run build
+
+      - name: Install NPM packages
+        id: install-npm-serverless
+        working-directory: serverless
+        run: |
+          npm install
+          npm run install-serverless-plugin
+
+      - name: Setup Environment
+        id: setup-environment-serverless
+        working-directory: serverless
+        run: npm run setup-environment $ENVIRONMENT
+
+      - name: Deploy
+        working-directory: serverless
+        run: |
+          npm run build
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET }} npm run deploy-env

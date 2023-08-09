@@ -12,9 +12,12 @@ import SyncClient from "twilio-sync";
 import StatUtil, { Metric, MetricDefinitions } from "../utils/statistics";
 import { LoadingCard } from "../components/loadingCard";
 
+type TaskrouterData = { queues: any[]; workspace: {} };
+
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<TaskrouterData>();
+  const [statistics, setStatistics] = useState<Metric[]>([]);
   const [status, setStatus] = useState<string>();
   const [client, setClient] = useState<SyncClient>();
   const [token, setToken] = useState<string>();
@@ -24,7 +27,7 @@ const Home: NextPage = () => {
 
   // Helper method to get an access token
   const getToken = () =>
-    fetch(`${BASE_URL}/syncToken`)
+    fetch(`${BASE_URL}/api/token`)
       .then((response) => response.json())
       .then((data) => {
         setStatus("Got access token");
@@ -35,19 +38,6 @@ const Home: NextPage = () => {
         setStatus("Could not fetch token");
         console.error("Error getting token", reason);
       });
-
-  const processStats = (definitions: MetricDefinitions, data: any) => {
-    if (!definitions) {
-      console.warn("Received stat data but definitions not set");
-      setStatus("Received stat data but definitions not set");
-      return;
-    }
-    let stats = StatUtil.calculate(definitions, data);
-    console.log("Got stats", stats);
-    setData(stats);
-    setStatus("Last activity " + new Date().toTimeString());
-    setLoading(false);
-  };
 
   // Create sync client and logic for token refresh
   useEffect(() => {
@@ -65,8 +55,7 @@ const Home: NextPage = () => {
         console.log("Updating token for sync client");
         setStatus("Fetching new access token");
         const token = await getToken();
-        let client = new SyncClient(token);
-        // client.updateToken(token);
+        client.updateToken(token);
         setToken(token);
         setClient(client);
         setStatus("Updated access token");
@@ -93,7 +82,7 @@ const Home: NextPage = () => {
       client
         .document(process.env.NEXT_PUBLIC_DEFINITIONS_DOCUMENT_NAME)
         .then((doc) => {
-          console.log("SYNC definitions doc updated", doc.value);
+          console.log("SYNC definitions doc retrieved", doc.value);
           setDefinitions(doc.value as MetricDefinitions);
           doc.on("updated", (event) => {
             console.log("SYNC definitions doc updated", event.value);
@@ -106,38 +95,82 @@ const Home: NextPage = () => {
 
   // Subscribe to statistic updates
   useEffect(() => {
-    if (client != null) {
-      // Get the statistics document
-      client
-        .document(process.env.NEXT_PUBLIC_STAT_DOCUMENT_NAME)
-        .then((doc) => {
-          if (!definitions) {
-            console.warn("Received stats but definitions not set");
-            setStatus("Received stats but definitions not set");
-            return;
-          }
-          // Show stats based on initial data
-          processStats(definitions, doc.value);
-          // Create a subscription to statistics
-          doc.on("updated", (event) => processStats(definitions, event.value));
-        });
-    }
+    if (!definitions) return;
+    if (!client) return;
+
+    // Get the statistics document
+    console.log(
+      `Subscribing to sync map: ${process.env.NEXT_PUBLIC_DASHBOARD_SYNC_MAP_SID}`
+    );
+
+    // Update statistic
+    const incrementalUpdateData = (item: any) => {
+      return setData((data) => {
+        if (!data) data = { queues: [], workspace: {} };
+        if (item.key === "WORKSPACE") {
+          data.workspace = item.value;
+        } else {
+          const idx = data.queues.findIndex(
+            (q) => q.sid == (item.value as any).sid
+          );
+          idx >= 0
+            ? (data.queues[idx] = item.value)
+            : data.queues.push(item.value);
+          console.log(`Index for ${item.value.friendlyName} is ${idx}`);
+        }
+        setStatus("Last activity " + new Date().toTimeString());
+        return data;
+      });
+    };
+
+    client.map(process.env.NEXT_PUBLIC_DASHBOARD_SYNC_MAP_SID).then((map) => {
+      if (!definitions) {
+        console.warn("Received stats but definitions not set");
+        setStatus("Received stats but definitions not set");
+        return;
+      }
+
+      map.getItems().then((mapData) => {
+        mapData.items.map((item) => incrementalUpdateData(item));
+      });
+
+      // Create a subscription to statistics
+      map.on("itemUpdated", (event) => incrementalUpdateData(event.item));
+    });
   }, [client, token, definitions]);
+
+  useEffect(() => {
+    console.log("Data updated", data);
+  }, [data?.queues, data?.workspace]);
+
+  // Update metrics when data changes
+  useEffect(() => {
+    if (!definitions) {
+      console.warn("Received stat data but definitions not set");
+      setStatus("Received stat data but definitions not set");
+      return;
+    }
+    let stats = StatUtil.calculate(definitions, data);
+    console.log("Got stats", stats);
+    setStatistics(stats);
+    setStatus("Last activity " + new Date().toTimeString());
+    setLoading(false);
+  }, [data?.queues, data?.workspace]);
 
   // Increment stat counters
   useEffect(() => {
     const id = setInterval(() => {
-      if (!data) return;
+      if (!statistics) return;
 
       // Increment
       let newData: Metric[] = [];
-      data.forEach((stat: Metric) => {
+      statistics.forEach((stat: Metric) => {
         if (stat.increment) {
           // stat.value = parseInt(stat.value).toString();
           if (parseInt(stat.value) > 0) stat.value = stat.value + 1;
         }
         newData.push(stat);
-        setData(newData);
+        setStatistics(newData);
         // return newData;
       });
     }, 1000);
@@ -171,8 +204,8 @@ const Home: NextPage = () => {
               </Column>
             ))}
 
-          {data &&
-            data.map((item: Metric, i: number) => (
+          {statistics &&
+            statistics.map((item: Metric, i: number) => (
               <Column key={i} span={4} element="STAT">
                 <Statistic stat={item} />
               </Column>

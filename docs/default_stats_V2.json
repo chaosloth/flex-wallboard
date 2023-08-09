@@ -1,0 +1,160 @@
+{
+  "Avg until Cancelled": {
+    "metric": {
+      "formula": "data.workspace.cumulative.wait_duration_until_canceled.avg",
+      "label": "Avg until Cancelled",
+      "value": 9,
+      "increment": false,
+      "format": ""
+    }
+  },
+  "ASA FMT": {
+    "metric": {
+      "formula": "data.workspace.cumulative.avg_task_acceptance_time",
+      "label": "ASA",
+      "value": 9,
+      "increment": false,
+      "format": "seconds"
+    }
+  },
+  "Longest Waiting": {
+    "metric": {
+      "formula": "data.workspace.realtime.longest_task_waiting_age",
+      "label": "Longest Waiting",
+      "value": 9,
+      "increment": true,
+      "format": "seconds"
+    }
+  },
+  "TQ: Everyone - Total Timed Out": {
+    "metric": {
+      "formula": "data.queues.find((q) => q.friendlyName === 'Everyone').data.cumulative.reservations_timed_out",
+      "label": "TQ: Everyone - Total Timed Out",
+      "value": 9,
+      "increment": false,
+      "format": ""
+    }
+  },
+  "Workers Offline": {
+    "metric": {
+      "formula": "data.workspace.realtime.activity_statistics.find((e) => e.friendly_name === 'Offline').workers",
+      "label": "Workers Offline",
+      "value": 9,
+      "increment": false,
+      "format": ""
+    }
+  },
+  "Workers Available": {
+    "metric": {
+      "formula": "data.workspace.realtime.activity_statistics.find((e) => e.friendly_name === 'Available').workers",
+      "label": "Workers Available",
+      "value": 9,
+      "increment": false,
+      "format": ""
+    }
+  },
+  "Reservations Accepted": {
+    "metric": {
+      "formula": "data.workspace.cumulative.reservations_accepted",
+      "label": "Reservations Accepted",
+      "value": 9,
+      "increment": false,
+      "format": ""
+    }
+  },
+  "TQ: General - Active Tasks": {
+    "metric": {
+      "formula": "data.queues.find((q) => q.friendlyName === 'General').data.realtime.total_tasks",
+      "label": "TQ: General - Active Tasks",
+      "value": 9,
+      "increment": false,
+      "format": ""
+    }
+  },
+  "Tasks Waiting Time": {
+    "metric": {
+      "formula": "data.workspace.realtime.longest_task_waiting_age",
+      "label": "Tasks Waiting Time",
+      "value": 9,
+      "increment": true,
+      "format": "seconds"
+    }
+  },
+  "Tasks Canceled": {
+    "metric": {
+      "formula": "data.workspace.cumulative.tasks_canceled",
+      "label": "Tasks Canceled",
+      "value": 9,
+      "increment": false,
+      "format": ""
+    }
+  },
+  "ASA": {
+    "metric": {
+      "formula": "data.workspace.cumulative.avg_task_acceptance_time",
+      "label": "ASA",
+      "value": 9,
+      "increment": false,
+      "format": "seconds"
+    }
+  },
+  "TQ: General - Ringing/Reserved": {
+    "metric": {
+      "format": "",
+      "secondThresholdValue": "2",
+      "value": "0",
+      "label": "TQ: General - Ringing/Reserved",
+      "firstThresholdValue": "1",
+      "secondThresholdStyle": {
+        "statColour": "colorTextInverse",
+        "backgroundColour": "colorBackgroundError",
+        "headlineColour": "colorTextInverse",
+        "styleName": "Error Strong"
+      },
+      "increment": false,
+      "formula": "data.queues.find((q) => q.friendlyName === 'General').data.realtime.tasks_by_status.reserved",
+      "firstThresholdStyle": {
+        "statColour": "colorTextInverse",
+        "backgroundColour": "colorBackgroundWarning",
+        "headlineColour": "colorTextInverse",
+        "styleName": "Warn Strong"
+      }
+    }
+  },
+  "Total Completed": {
+    "metric": {
+      "formula": "data.workspace.cumulative.tasks_completed",
+      "label": "Total Completed",
+      "value": 9,
+      "increment": false,
+      "format": ""
+    }
+  },
+  "TQ: Everyone - Active Tasks": {
+    "metric": {
+      "formula": "data.queues.find((q) => q.friendlyName === 'Everyone').data.realtime.tasks_by_status.assigned",
+      "label": "TQ: Everyone - Active Tasks",
+      "value": 9,
+      "increment": false,
+      "format": ""
+    }
+  },
+  "Total Cancelled": {
+    "metric": {
+      "formula": "data.workspace.cumulative.tasks_canceled",
+      "label": "Total Completed",
+      "value": 9,
+      "increment": false,
+      "format": ""
+    }
+  },
+  "Workers Logged In": {
+    "metric": {
+      "formula": "data.workspace.realtime.total_workers - data.workspace.realtime.activity_statistics.find((e) => e.friendly_name === 'Offline').workers",
+      "label": "Workers Logged In",
+      "value": 9,
+      "increment": false,
+      "format": ""
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "assetsFolder": "./dist/assets",
+  "functionsFolder": "./dist/functions",
+  "runtime": "node16"
+}
