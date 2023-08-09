@@ -107,7 +107,7 @@ const ConfigureStat: React.FC<ConfigureStatProps> = (
 
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE || "";
 
-    fetch(`${BASE_URL}/saveDefinition`, {
+    fetch(`${BASE_URL}/api/save`, {
       method: "POST",
       headers: {
         Accept: "application/json",
