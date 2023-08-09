@@ -2,6 +2,13 @@
     justify-content: center;
 }
 
+@media screen and (min-width: 1024px) {
+    [data-paste-element|="STATGRID"] {
+        margin-right: unset !important;
+        margin-left: unset !important;
+    }
+}
+
 [data-paste-element|="STAT"] {
     padding-top: 1rem !important;
     padding-bottom: 1rem !important;

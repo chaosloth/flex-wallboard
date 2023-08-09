@@ -44,24 +44,53 @@ const Home: NextPage = () => {
     (async () => {
       console.log("Fetching access token");
       setStatus("Fetching access token");
-      // Get a new token on load
-      let token = await getToken();
 
-      console.log("Creating new sync client");
-      setStatus("Creating new sync client");
-      let client = new SyncClient(token);
+      try {
+        // Get a new token on load
+        let token = await getToken();
 
-      client.on("tokenAboutToExpire", async () => {
-        console.log("Updating token for sync client");
-        setStatus("Fetching new access token");
-        const token = await getToken();
-        client.updateToken(token);
-        setToken(token);
+        console.log("Creating new sync client");
+        setStatus("Creating new sync client");
+
+        let client = new SyncClient(token);
         setClient(client);
-        setStatus("Updated access token");
-        console.log("Updated access token");
-      });
-      setClient(client);
+
+        client.on("tokenAboutToExpire", async () => {
+          console.log("tokenAboutToExpire - Updating token for sync client");
+          setStatus("Fetching new access token");
+          const token = await getToken();
+          client.updateToken(token);
+          setToken(token);
+          setClient(client);
+          setStatus("tokenAboutToExpire - Updated access token");
+          console.log("Updated access token");
+        });
+
+        client.on("tokenExpired", async () => {
+          console.log("tokenExpired - Updating token for sync client");
+          setStatus("Fetching new access token");
+          const token = await getToken();
+          client.updateToken(token);
+          setToken(token);
+          setClient(client);
+          setStatus("Updated expired access token");
+          console.log("tokenExpired - Updated access token");
+        });
+
+        client.on("connectionError", async (connectionError) => {
+          console.log("Sync Client Connection error", connectionError);
+          setStatus("Sync Client Connection error - Check logs");
+        });
+
+        client.on("connectionStateChanged", async (newState) => {
+          console.log("Sync Connection State", newState);
+          setStatus(`Sync Client Connection State Changed [${newState}]`);
+        });
+      } catch (err) {
+        setStatus("Error creating sync client. Check logs");
+        console.error(err);
+      }
+
       setToken(token);
     })();
 

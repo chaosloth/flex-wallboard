@@ -9,7 +9,6 @@ import {
 } from "@twilio-labs/serverless-runtime-types/types";
 
 export type MyContext = {
-  TWILIO_ACCOUNT_SID: string;
   ACCOUNT_SID: string;
   TWILIO_API_KEY: string;
   TWILIO_API_SECRET: string;
