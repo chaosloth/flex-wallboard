@@ -15,7 +15,6 @@ import { LoadingCard } from "../components/loadingCard";
 type TaskrouterData = { queues: any[]; workspace: {} };
 
 const Home: NextPage = () => {
-  const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<TaskrouterData>();
   const [statistics, setStatistics] = useState<Metric[]>([]);
@@ -108,12 +107,8 @@ const Home: NextPage = () => {
     const incrementalUpdateData = (item: any) => {
       return setData((data) => {
         if (!data) data = { queues: [], workspace: {} };
-        console.log(`item key [${item.key}]`);
-        console.log(`item value`, item.value);
-
         if (item.key === "WORKSPACE") {
           data.workspace = item.value;
-          return data;
         } else {
           const idx = data.queues.findIndex(
             (q) => q.sid == (item.value as any).sid
@@ -122,9 +117,9 @@ const Home: NextPage = () => {
             ? (data.queues[idx] = item.value)
             : data.queues.push(item.value);
           console.log(`Index for ${item.value.friendlyName} is ${idx}`);
-          return data;
         }
-        // console.log(`Returning data`, data);
+        setStatus("Last activity " + new Date().toTimeString());
+        return data;
       });
     };
 
@@ -136,26 +131,7 @@ const Home: NextPage = () => {
       }
 
       map.getItems().then((mapData) => {
-        // mapData.items.map((item) => incrementalUpdateData(item));
-
-        // mapData.items.map((item) =>
-        //   setData((data) => {
-        //     if (!data) data = { queues: [], workspace: {} };
-        //     const idx = data.queues.findIndex(
-        //       (q) => q.sid == (item.value as any).sid
-        //     );
-        //     idx >= 0
-        //       ? (data.queues[idx] = item.value)
-        //       : data.queues.push(item.value);
-        //     console.log(`Returning data for idx: ${idx}`, data);
-        //     setRefresh(true);
-        //     return data;
-        //   })
-        // );
-
-        // data.queues[data.queues.findIndex((q) => q.sid == item.value.sid)] = item.value)
-
-        setData(StatUtil.mapToDocument(mapData.items));
+        mapData.items.map((item) => incrementalUpdateData(item));
       });
 
       // Create a subscription to statistics
@@ -166,11 +142,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     console.log("Data updated", data);
   }, [data?.queues, data?.workspace]);
-
-  useEffect(() => {
-    console.log("Refresh on data, now", refresh);
-    setRefresh(false);
-  }, [refresh]);
 
   // Update metrics when data changes
   useEffect(() => {
@@ -184,30 +155,30 @@ const Home: NextPage = () => {
     setStatistics(stats);
     setStatus("Last activity " + new Date().toTimeString());
     setLoading(false);
-  }, [data]);
+  }, [data?.queues, data?.workspace]);
 
   // Increment stat counters
-  // useEffect(() => {
-  //   const id = setInterval(() => {
-  //     if (!statistics) return;
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (!statistics) return;
 
-  //     // Increment
-  //     let newData: Metric[] = [];
-  //     statistics.forEach((stat: Metric) => {
-  //       if (stat.increment) {
-  //         // stat.value = parseInt(stat.value).toString();
-  //         if (parseInt(stat.value) > 0) stat.value = stat.value + 1;
-  //       }
-  //       newData.push(stat);
-  //       setStatistics(newData);
-  //       // return newData;
-  //     });
-  //   }, 1000);
+      // Increment
+      let newData: Metric[] = [];
+      statistics.forEach((stat: Metric) => {
+        if (stat.increment) {
+          // stat.value = parseInt(stat.value).toString();
+          if (parseInt(stat.value) > 0) stat.value = stat.value + 1;
+        }
+        newData.push(stat);
+        setStatistics(newData);
+        // return newData;
+      });
+    }, 1000);
 
-  //   return () => {
-  //     clearInterval(id);
-  //   };
-  // });
+    return () => {
+      clearInterval(id);
+    };
+  });
 
   let loader = [1, 2, 3, 4, 5, 6];
 
